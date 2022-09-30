@@ -1,4 +1,4 @@
-// bin/perf-vumeter.rs
+// bin/tcp_server.rs
 
 use log::*;
 use std::{io, io::Write, net};
@@ -7,7 +7,6 @@ use tokio::io::AsyncReadExt;
 use tokio::net::{TcpListener, TcpStream};
 
 use tcp_server::*;
-const BUF_SZ: usize = 8192;
 
 fn main() -> anyhow::Result<()> {
     let opts = OptsCommon::from_args();
@@ -31,6 +30,7 @@ async fn run_server(opts: &OptsCommon) -> anyhow::Result<()> {
     }
 }
 
+const BUF_SZ: usize = 8192;
 async fn process_conn(mut socket: TcpStream, addr: net::SocketAddr, cn: u64) -> anyhow::Result<()> {
     info!("New conn #{cn} from {addr:?}");
     let mut buf = vec![0; BUF_SZ];
