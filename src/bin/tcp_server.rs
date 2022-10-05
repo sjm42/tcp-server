@@ -18,6 +18,7 @@ fn main() -> anyhow::Result<()> {
 
 async fn run_server(opts: &OptsCommon) -> anyhow::Result<()> {
     let addr = &opts.listen;
+    let loglvl = opts.get_loglevel();
     let listener = TcpListener::bind(addr).await?;
     info!("Listening on {addr}");
     let mut i: u64 = 0;
@@ -25,13 +26,17 @@ async fn run_server(opts: &OptsCommon) -> anyhow::Result<()> {
         let (socket, c_addr) = listener.accept().await?;
         let cn = i;
         i += 1;
-
-        tokio::spawn(async move { process_conn(socket, c_addr, cn).await });
+        tokio::spawn(async move { process_conn(socket, c_addr, loglvl, cn).await });
     }
 }
 
 const BUF_SZ: usize = 8192;
-async fn process_conn(mut socket: TcpStream, addr: net::SocketAddr, cn: u64) -> anyhow::Result<()> {
+async fn process_conn(
+    mut socket: TcpStream,
+    addr: net::SocketAddr,
+    loglvl: LevelFilter,
+    cn: u64,
+) -> anyhow::Result<()> {
     info!("New conn #{cn} from {addr:?}");
     let mut buf = vec![0; BUF_SZ];
 
@@ -43,7 +48,12 @@ async fn process_conn(mut socket: TcpStream, addr: net::SocketAddr, cn: u64) -> 
         }
         {
             let mut w = io::stdout().lock();
-            w.write_all(format!("[{cn}] ").as_bytes())?;
+            match loglvl {
+                LevelFilter::Info | LevelFilter::Debug | LevelFilter::Trace => {
+                    w.write_all(format!("[#{cn}] ").as_bytes())?;
+                }
+                _ => {}
+            }
             w.write_all(&buf[0..n])?;
             w.flush()?;
         }
