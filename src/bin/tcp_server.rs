@@ -30,7 +30,8 @@ async fn run_server(opts: &OptsCommon) -> anyhow::Result<()> {
     }
 }
 
-const BUF_SZ: usize = 8192;
+const BUF_SZ: usize = 64 * 1024;
+
 async fn process_conn(
     mut socket: TcpStream,
     addr: net::SocketAddr,
@@ -38,7 +39,7 @@ async fn process_conn(
     cn: u64,
 ) -> anyhow::Result<()> {
     info!("New conn #{cn} from {addr:?}");
-    let mut buf = vec![0; BUF_SZ];
+    let mut buf = [0u8; BUF_SZ];
 
     loop {
         let n = socket.read(&mut buf).await?;
@@ -59,4 +60,5 @@ async fn process_conn(
         }
     }
 }
+
 // EOF
