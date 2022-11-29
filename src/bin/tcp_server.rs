@@ -8,7 +8,7 @@ use tokio::net::{TcpListener, TcpStream};
 
 use tcp_server::*;
 
-fn main() -> anyhow::Result<()> {
+fn main() -> Result<(), io::Error> {
     let opts = OptsCommon::from_args();
     opts.start_pgm(env!("CARGO_BIN_NAME"));
 
@@ -16,7 +16,7 @@ fn main() -> anyhow::Result<()> {
     runtime.block_on(async move { run_server(&opts).await })
 }
 
-async fn run_server(opts: &OptsCommon) -> anyhow::Result<()> {
+async fn run_server(opts: &OptsCommon) -> Result<(), io::Error> {
     let addr = &opts.listen;
     let loglvl = opts.get_loglevel();
     let listener = TcpListener::bind(addr).await?;
@@ -37,7 +37,7 @@ async fn process_conn(
     addr: net::SocketAddr,
     loglvl: LevelFilter,
     cn: u64,
-) -> anyhow::Result<()> {
+) -> Result<(), io::Error> {
     info!("New conn #{cn} from {addr:?}");
     let mut buf = [0u8; BUF_SZ];
 

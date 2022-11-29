@@ -1,6 +1,6 @@
 // lib.rs
 
-mod startup;
-pub use startup::*;
+mod config;
+pub use config::*;
 
 // EOF

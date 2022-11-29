@@ -1,4 +1,4 @@
-// startup.rs
+// config.rs
 
 use log::*;
 use structopt::StructOpt;
