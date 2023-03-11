@@ -648,7 +648,7 @@ dependencies = [
 
 [[package]]
 name = "tcp_server"
-version = "0.1.7"
+version = "0.1.8"
 dependencies = [
  "build-data",
  "env_logger",
