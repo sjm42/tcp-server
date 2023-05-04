@@ -660,7 +660,7 @@ dependencies = [
 
 [[package]]
 name = "tcp_server"
-version = "0.1.8"
+version = "0.1.9"
 dependencies = [
  "build-data",
  "env_logger",
