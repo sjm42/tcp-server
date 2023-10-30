@@ -1,0 +1,8 @@
+[build]
+target = "mipsel-unknown-linux-musl"
+
+[target.mipsel-unknown-linux-musl]
+# linker = "lld"
+linker = "rust-lld"
+# linker = "mipsel-linux-gnu-gcc"
+

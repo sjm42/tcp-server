@@ -20,9 +20,14 @@ build-data = "0.1"
 
 [profile.release]
 lto = true
-opt-level = "s"   # static
+opt-level = "z"
 codegen-units = 1
-# opt-level = 3 # default
-# opt-level = 'z'  # Optimize for size.
+
+[profile.minsize]
+inherits = "release"
+strip = true
+lto = "fat"
+opt-level = "s"
+panic = "abort"
 
 # EOF
