@@ -1,15 +1,15 @@
 // bin/tcp_server.rs
 
+use tcp_server::*;
+
+use clap::Parser;
 use log::*;
 use std::{io, io::Write, net};
-use structopt::StructOpt;
 use tokio::io::AsyncReadExt;
 use tokio::net::{TcpListener, TcpStream};
 
-use tcp_server::*;
-
 fn main() -> Result<(), io::Error> {
-    let opts = OptsCommon::from_args();
+    let opts = OptsCommon::parse();
     opts.start_pgm(env!("CARGO_BIN_NAME"));
 
     let runtime = tokio::runtime::Runtime::new()?;

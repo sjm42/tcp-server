@@ -1,18 +1,18 @@
 // config.rs
 
+use clap::Parser;
 use log::*;
-use structopt::StructOpt;
 
-#[derive(Debug, Default, StructOpt)]
+#[derive(Debug, Default, Parser)]
 pub struct OptsCommon {
-    #[structopt(short, long)]
+    #[arg(short, long)]
     pub verbose: bool,
-    #[structopt(short, long)]
+    #[arg(short, long)]
     pub debug: bool,
-    #[structopt(short, long)]
+    #[arg(short, long)]
     pub trace: bool,
 
-    #[structopt(short, long, default_value = "localhost:4242")]
+    #[arg(short, long, default_value = "localhost:4242")]
     pub listen: String,
 }
 impl OptsCommon {
