@@ -1,12 +1,12 @@
 // bin/tcp_server.rs
 
-use tcp_server::*;
+use std::{io, io::Write, net};
 
 use clap::Parser;
-use log::*;
-use std::{io, io::Write, net};
 use tokio::io::AsyncReadExt;
 use tokio::net::{TcpListener, TcpStream};
+
+use tcp_server::*;
 
 fn main() -> Result<(), io::Error> {
     let opts = OptsCommon::parse();
@@ -35,7 +35,7 @@ const BUF_SZ: usize = 64 * 1024;
 async fn process_conn(
     mut socket: TcpStream,
     addr: net::SocketAddr,
-    loglvl: LevelFilter,
+    loglvl: Level,
     cn: u64,
 ) -> Result<(), io::Error> {
     info!("New conn #{cn} from {addr:?}");
@@ -50,7 +50,7 @@ async fn process_conn(
         {
             let mut w = io::stdout().lock();
             match loglvl {
-                LevelFilter::Info | LevelFilter::Debug | LevelFilter::Trace => {
+                Level::INFO | Level::DEBUG | Level::TRACE => {
                     w.write_all(format!("[#{cn}] ").as_bytes())?;
                 }
                 _ => {}

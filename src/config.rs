@@ -1,7 +1,8 @@
 // config.rs
 
 use clap::Parser;
-use log::*;
+
+use crate::*;
 
 #[derive(Debug, Default, Parser)]
 pub struct OptsCommon {
@@ -15,25 +16,26 @@ pub struct OptsCommon {
     #[arg(short, long, default_value = "localhost:4242")]
     pub listen: String,
 }
+
 impl OptsCommon {
-    pub fn get_loglevel(&self) -> LevelFilter {
+    pub fn get_loglevel(&self) -> Level {
         if self.trace {
-            LevelFilter::Trace
+            Level::TRACE
         } else if self.debug {
-            LevelFilter::Debug
+            Level::DEBUG
         } else if self.verbose {
-            LevelFilter::Info
+            Level::INFO
         } else {
-            LevelFilter::Error
+            Level::ERROR
         }
     }
-
+    
     pub fn start_pgm(&self, name: &str) {
-        env_logger::Builder::new()
-            .filter_module(env!("CARGO_PKG_NAME"), self.get_loglevel())
-            .filter_module(name, self.get_loglevel())
-            .format_timestamp_secs()
+        tracing_subscriber::fmt()
+            .with_max_level(self.get_loglevel())
+            .with_target(false)
             .init();
+
         info!("Starting up {name} v{}...", env!("CARGO_PKG_VERSION"));
         debug!("Git branch: {}", env!("GIT_BRANCH"));
         debug!("Git commit: {}", env!("GIT_COMMIT"));

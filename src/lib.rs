@@ -1,6 +1,9 @@
 // lib.rs
 
-mod config;
+pub use tracing::*;
+
 pub use config::*;
+
+mod config;
 
 // EOF
